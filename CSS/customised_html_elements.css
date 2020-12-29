@@ -1,0 +1,9 @@
+hr.divider { 
+    margin: 10px;
+    border-width: 1px;
+  } 
+  
+  p {
+    margin: 0px;
+    padding: 0px; 
+  }
