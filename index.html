@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="CSS/sidepanel.css"/>
     <link rel="stylesheet" href="CSS/custom_markers.css"/> 
     <link rel="stylesheet" href="CSS/routing_buttons.css"/>
+    <link rel="stylesheet" href="CSS/collapsible.css"/>
     <script src="resources/jquery-3.5.1.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
@@ -52,7 +53,15 @@
         #legend_scrollable {
             position: relative;
             overflow-y: scroll;
-            height: 300px;
+            height: 200px;
+            z-index:1000; 
+            background-color: none;
+            
+        }
+        #legend_scrollable-1 {
+            position: relative;
+            overflow-y: scroll;
+            height: 250px;
             z-index:1000; 
             background-color: none;
             
@@ -72,6 +81,10 @@
 
         </select><hr style="height:1px;border-width:0;color:rgb(112, 112, 112);background-color:rgb(112, 112, 112)">
 
+
+        <button type="button" class="collapsible">Show Datasets</button>
+        <div class="content">
+        <div id="legend_scrollable-1" class="style-2">
         <div>
             <label class="switch">
                 <input id="checkbox_traffic_count" type="checkbox" name="traffic_count" value="traffic_count">
@@ -144,6 +157,23 @@
                 <span class="slider round"></span>
             </label> Healthcare establishments<br>
         </div>
+        </div>
+        </div>
+        <br>
+
+        <button type="button" class="collapsible">Show Commonplace responses</button>
+        <div class="content">
+        <div><br>
+            <select id='commonplace_filter' class='form-control'>
+                <option value='Your relationship to the area'>Your relationship to the area</option>
+                <option value='All responses'>All responses</option>
+                <option value='Live here'>Live here</option>
+                <option value='Work here'>Work here</option>
+                <option value='Come shopping here'>Come shopping here</option>
+            </select>
+        </div>
+
+        </div>
         <hr style="height:1px;border-width:0;color:rgb(112, 112, 112);background-color:rgb(112, 112, 112)">
 
         <div>
@@ -167,6 +197,23 @@
         <h6 id="map_coords" class="text-center"></h6>
     </div>
     <script>
+
+        // COLLAPSIBLE
+
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight){
+            content.style.maxHeight = null;
+            } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+        }
 
         // STYLE FUNCTIONS
 
@@ -780,6 +827,45 @@
             });
         };
 
+        // COMMONPLACE COMMENTS
+        var markers
+        var commonplaceLayer
+        function loadCommonplace() {
+            if (markers) {markers.remove()};
+            $.ajax({
+                url: "php/load_commonplace.php",
+                type: "POST",
+                data: {filter: $("#commonplace_filter").val()},
+                success: function(response) {
+                    if ($('#commonplace_filter').val() !== 'Your relationship to the area') {
+                        console.log($("#commonplace_filter").val())
+                        commonplaceLayer = L.geoJSON(JSON.parse(response), {
+
+                            pointToLayer: function(feature, latlng) {
+                                return L.marker(latlng, {
+                                    icon: L.AwesomeMarkers.icon({
+                                        icon: 'comment',
+                                        prefix: 'fa', 
+                                        markerColor: 'green'
+                                    })
+                                });
+                            },
+                            onEachFeature: function onEachFeature(feature, layer) {  
+                                layer.bindPopup('<b>' + "Number of likes/upvotes: " + '</b>' + feature.properties.agreements + '<hr class=divider />' +
+                                                '<b>' + "Relationship to area: " + '</b>' + feature.properties.relationship_to_area + '<hr class=divider />' +
+                                                '<b>' + "What are you commenting on: " + '</b>' + feature.properties.comment_on); 
+                            }
+                        });
+                        markers = L.markerClusterGroup();
+                        markers.addLayer(commonplaceLayer)
+                        markers.addTo(map);
+                    } else {
+                        map.removeLayer(markers);
+                    };
+                }
+            });
+        };  
+
         // ROUTING 
 
         function routing() {
@@ -811,8 +897,18 @@
                     ],
                     routeWhileDragging: true
                 }).addTo(map);
-        }
+        };
+        // TEST
 
+        function routing() {
+            L.Routing.control({
+                waypoints: [
+                    L.latLng(52.41122, -4.08554),
+                    L.latLng(52.24210, -4.26132)
+                    ],
+                routeWhileDragging: true
+            }).addTo(map);
+        };
 
         // EVENT HANDLERS 
 
@@ -873,14 +969,18 @@
         $("#checkbox_healthcare").change(function(){
             loadHealthcare();
         });
+        // COMMONPLACE
+        $("#commonplace_filter").change(function(){
+            loadCommonplace();
+        });
         // FIND ROUTE
         $("#checkbox_find_route").change(function(){
             routing();
         });
         // FIND ROUTE1
-        $("#checkbox_find_route1").change(function(){
-            routing();
-        });
+        //$("#checkbox_find_route1").change(function(){
+        //    routing();
+        //});
 
 
     </script>
