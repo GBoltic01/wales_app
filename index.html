@@ -180,14 +180,9 @@
             <label class="switch">
                 <input id="checkbox_find_route" type="checkbox" name="find-route" value="find-route"> 
                 <span class="slider round"></span>
-            </label> Find destination<br>
+            </label> Find a route<br>
         </div>
-        <div>
-            <label class="switch">
-                <input id="checkbox_find_route1" type="checkbox" name="find-route1" value="find-route1"> 
-                <span class="slider round"></span>
-            </label> Find origin<br>
-        </div>
+        <div id="routing"></div>
 
         <div id="legend_scrollable" class="col-md-3>"></div>
 
@@ -869,45 +864,43 @@
         // ROUTING 
 
         function routing() {
-            var coordDest;
-                function findRoute() {
-                    if ($("#checkbox_find_route").is(":checked")) {
-                        var dest = map.on('click', function(e) {
-                            coordDest = e.latlng;
-                            alert("You've set the destination: " + coordDest);
-                            $("#checkbox_find_route").prop("checked", false);
-                        });
-                    } 
-                }
+            if ($("#checkbox_find_route").is(":checked")) {
+                $("#routing").append(
+                    '<form action="" id="submit-origins">' +
+                        '<label>Set number of origins</label>' +
+                        '<input id="number" type="number" id="origins"/>' +
+                        '<input type="submit"/>' +
+                    '</form>'
+                );
+                $(document).ready(function() {
+                    $(document).on("submit", "#submit-origins", function() {
+                        $("#submit-origins").append("<br>" + "Click on a map to specify each origin location.");
+                        
+                        var origin;
+                        var destination;
+                        var counter = 0;
+                            map.on("click", function(e) {
+                                if (counter < $("#number").val()) {
+                                    origin = e.latlng;
+                                    counter++;
+                                    console.log(origin)
+                                    console.log(counter)
+                                    alert("You've set origin")
+                                    console.log($("#number").val())
+                                } else if (counter == $("#number").val()) {
+                                    destination = e.latlng;
+                                    counter++;
+                                    console.log(destination);
+                                    console.log(counter);
+                                    
+                                    alert("You've set the destination")
+                                }
+                            });
 
-            var coordOrigin;
-                function findRoute1() {
-                    if ($("#checkbox_find_route1").is(":checked")) {
-                        var origin = map.on('click', function(e) {
-                            coordOrigin = e.latlng;
-                            alert("You've set the origin: " + coordOrigin);
-                            $("#checkbox_find_route1").prop("checked", false);
-                        });
-                    }
-                }
-                L.Routing.control({
-                    waypoints: [
-                        L.latLng(coordOrigin),
-                        L.latLng(coordDest)
-                    ],
-                    routeWhileDragging: true
-                }).addTo(map);
-        };
-        // TEST
-
-        function routing() {
-            L.Routing.control({
-                waypoints: [
-                    L.latLng(52.41122, -4.08554),
-                    L.latLng(52.24210, -4.26132)
-                    ],
-                routeWhileDragging: true
-            }).addTo(map);
+                        return false;
+                    });
+                });
+            };
         };
 
         // EVENT HANDLERS 
@@ -977,10 +970,6 @@
         $("#checkbox_find_route").change(function(){
             routing();
         });
-        // FIND ROUTE1
-        //$("#checkbox_find_route1").change(function(){
-        //    routing();
-        //});
 
 
     </script>
