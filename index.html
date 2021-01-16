@@ -184,7 +184,14 @@
         </div>
         <div id="routing"></div>
 
-        <div id="legend_scrollable" class="col-md-3>"></div>
+        <div>
+            <label class="switch">
+                <input id="pct" type="checkbox" name="pct" value="pct"> 
+                <span class="slider round"></span>
+            </label> PCT flows<br>
+        </div>
+
+        <div id="legend_scrollable" class="style-2"></div>
 
     </div>
     <div id="mapdiv" class="col-md-9"></div>
@@ -280,7 +287,15 @@
                     a < 1731 ? 12 :
                     a < 3688 ? 15 :
                     a < 7571 ? 19 : 19  
-        }
+        };
+
+        function stylePct(a) {
+            return  a < 20 ? 1 :
+                    a < 40 ? 4 :
+                    a < 80 ? 6 :
+                    a < 120 ? 8 :
+                    a < 250 ? 10 : 10 
+        };
 
 
         // BASEMAP
@@ -821,6 +836,39 @@
                 }
             });
         };
+        // PCT FLOWS
+        var pctLayer
+        function loadPct() {
+            $.ajax({
+                url: "php/load_pct.php",
+                type: "POST",
+                data: {filter: $("#filter1").val()},
+                success: function(response) {
+                    if ($("#pct").is(":checked")) {
+                        pctLayer = L.geoJSON(JSON.parse(response), {
+                            style: function(feature) {
+                                return {
+                                    weight: stylePct(feature.properties.bicycle),
+                                    color: "blue"
+                                };
+                            },
+                            onEachFeature: 
+                                function onEachFeature(feature, layer) {
+                                layer.bindPopup('<b>' + "Current predicted flows: " + '</b>' + feature.properties.bicycle + '<hr class=divider />' +
+                                                '<b>' + "GoDutch scenario: " + '</b>' + feature.properties.dutch_slc + '<hr class=divider />' + 
+                                                '<b>' + "Ebike scenario: " + '</b>' + feature.properties.ebike_slc + '<hr class=divider />' + 
+                                                '<b>' + "Statement: " + '</b>' + "null")
+                            }
+                        });
+                        pctLayer.addTo(map);
+                    } else {
+                        map.removeLayer(pctLayer);
+                    };
+                }
+            });
+        };
+
+
 
         // COMMONPLACE COMMENTS
         var markers
@@ -866,6 +914,9 @@
         function routing() {
             if ($("#checkbox_find_route").is(":checked")) {
                 $("#routing").append(
+                    '<button id="destination">Pick Destination</button>'
+                );
+                $("#routing").append(
                     '<form action="" id="submit-origins">' +
                         '<label>Set number of origins</label>' +
                         '<input id="number" type="number" id="origins"/>' +
@@ -873,28 +924,38 @@
                     '</form>'
                 );
                 $(document).ready(function() {
+
                     $(document).on("submit", "#submit-origins", function() {
                         $("#submit-origins").append("<br>" + "Click on a map to specify each origin location.");
                         
-                        var origin;
-                        var destination;
-                        var counter = 0;
+                            var origin = [];
+                            var destination;
+                            var counter = 0;
                             map.on("click", function(e) {
                                 if (counter < $("#number").val()) {
-                                    origin = e.latlng;
+                                    origin[counter] = e.latlng;
+                                    console.log(origin[counter])
+
+                                    L.Routing.control({
+                                        waypoints: [
+                                            L.latLng(origin[counter]),
+                                            L.latLng(51.48, -3.18)
+                                        ],
+                                        routeWhileDragging: true
+                                    }).addTo(map);
+
                                     counter++;
-                                    console.log(origin)
-                                    console.log(counter)
                                     alert("You've set origin")
-                                    console.log($("#number").val())
                                 } else if (counter == $("#number").val()) {
                                     destination = e.latlng;
+
                                     counter++;
+
                                     console.log(destination);
-                                    console.log(counter);
+                                    console.log(origin[counter]);
                                     
                                     alert("You've set the destination")
-                                }
+                                };
                             });
 
                         return false;
@@ -969,6 +1030,10 @@
         // FIND ROUTE
         $("#checkbox_find_route").change(function(){
             routing();
+        });
+        // EMPLOYMENT CENTRES
+        $("#pct").change(function(){
+            loadPct();
         });
 
 
