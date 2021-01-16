@@ -200,6 +200,7 @@
     </div>
     <script>
 
+
         // COLLAPSIBLE
 
         var coll = document.getElementsByClassName("collapsible");
@@ -910,59 +911,33 @@
         };  
 
         // ROUTING 
-
+        var routingLayer;
         function routing() {
             if ($("#checkbox_find_route").is(":checked")) {
-                $("#routing").append(
-                    '<button id="destination">Pick Destination</button>'
-                );
-                $("#routing").append(
-                    '<form action="" id="submit-origins">' +
-                        '<label>Set number of origins</label>' +
-                        '<input id="number" type="number" id="origins"/>' +
-                        '<input type="submit"/>' +
-                    '</form>'
-                );
-                $(document).ready(function() {
-
-                    $(document).on("submit", "#submit-origins", function() {
-                        $("#submit-origins").append("<br>" + "Click on a map to specify each origin location.");
-                        
-                            var origin = [];
-                            var destination;
-                            var counter = 0;
-                            map.on("click", function(e) {
-                                if (counter < $("#number").val()) {
-                                    origin[counter] = e.latlng;
-                                    console.log(origin[counter])
-
-                                    L.Routing.control({
-                                        waypoints: [
-                                            L.latLng(origin[counter]),
-                                            L.latLng(51.48, -3.18)
-                                        ],
-                                        routeWhileDragging: true
-                                    }).addTo(map);
-
-                                    counter++;
-                                    alert("You've set origin")
-                                } else if (counter == $("#number").val()) {
-                                    destination = e.latlng;
-
-                                    counter++;
-
-                                    console.log(destination);
-                                    console.log(origin[counter]);
-                                    
-                                    alert("You've set the destination")
-                                };
-                            });
-
-                        return false;
-                    });
+                var firstClick = true;
+                var origin;
+                var destination;
+                map.on("click",function(e) {
+                    if (firstClick) {
+                        origin = e.latlng;
+                        alert("You've set the origin point.")
+                        firstClick = false
+                    } else {
+                        destination = e.latlng; 
+                        routingLayer = L.Routing.control({
+                                waypoints: [
+                                    L.latLng(origin),
+                                    L.latLng(destination)
+                                ],
+                                routeWhileDragging: true
+                            }).addTo(map);
+                    };
                 });
-            };
-        };
+            } else {
+                map.removeLayer(routingLayer)
+            }            
+        }            
+
 
         // EVENT HANDLERS 
 
@@ -1031,7 +1006,7 @@
         $("#checkbox_find_route").change(function(){
             routing();
         });
-        // EMPLOYMENT CENTRES
+        // PCT
         $("#pct").change(function(){
             loadPct();
         });
