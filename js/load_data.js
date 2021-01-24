@@ -533,34 +533,6 @@ function loadPct() {
 };
 
 
-// ROUTING 
-var routingLayer;
-var origin;
-var destination;
-var firstClick = true;
-function routing() {
-    if ($("#checkbox_find_route").is(":checked")) {
-        map.on("click",function(e) {
-            if (firstClick) {
-                origin = e.latlng;
-                alert("You've set the destination point. Every next click on the map will add the origin point.")
-                firstClick = false
-            } else {
-                destination = e.latlng; 
-                routingLayer = L.Routing.control({
-                        waypoints: [
-                            L.latLng(origin),
-                            L.latLng(destination)
-                        ],
-                        routeWhileDragging: true
-                }).addTo(map);
-                console.log(routingLayer)
-            };
-        });
-    } else {
-        map.removeControl(routingLayer)
-    }            
-};
 
 // EVENT HANDLERS 
 
@@ -624,10 +596,6 @@ $("#checkbox_healthcare").change(function(){
 // COMMONPLACE
 $("#commonplace_filter").change(function(){
     loadCommonplace();
-});
-// FIND ROUTE
-$("#checkbox_find_route").change(function(){
-    routing();
 });
 // PCT
 $("#pct_filter").change(function(){
