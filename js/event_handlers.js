@@ -61,10 +61,6 @@
         $("#commonplace_filter").change(function(){
             loadCommonplace();
         });
-        // FIND ROUTE
-        $("#checkbox_find_route").change(function(){
-            routing();
-        });
         // PCT
         $("#pct").change(function(){
             loadPct();

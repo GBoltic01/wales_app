@@ -523,8 +523,10 @@ function loadPct() {
                                         '<b>' + "Ebike scenario: " + '</b>' + feature.properties.ebike_slc + '<hr class=divider />' + 
                                         '<b>' + "Statement: " + '</b>' + "null")
                     }
-                });
+                }
+                );
                 pctLayer.addTo(map);
+
             } else {
                 map.removeLayer(pctLayer);
             };
