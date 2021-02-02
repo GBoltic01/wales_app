@@ -43,6 +43,7 @@ function accidentSeverity(a) {
     };
 };
 
+
 var accidentsLayer;
 var legendAccidents; 
 
