@@ -68,11 +68,17 @@ function styleEmploymentCentres(a) {
             a < 7571 ? 19 : 19  
 };
 
-function stylePct(a) {
+
+function stylePct(a, b) {
+
+    var test1 = ss.ckmeans(b, 5)
+    console.log(test1[0].slice(-1) + ',' + test1[1].slice(-1) + ',' + test1[2].slice(-1) +',' +  test1[3].slice(-1))
     return  a < 1 ? 0 :
-            a < 20 ? 1 :
-            a < 40 ? 4 :
-            a < 80 ? 6 :
-            a < 120 ? 8 :
-            a < 250 ? 10 : 10 
+            a < Math.max.apply(Math, test1[0]) ? 1 :
+            a < Math.max.apply(Math, test1[1]) ? 2 :
+            a < Math.max.apply(Math, test1[2]) ? 3 :
+            a < Math.max.apply(Math, test1[3]) ? 4 : 
+            a < Math.max.apply(Math, test1[4]) ? 5 : 5 
 };
+
+

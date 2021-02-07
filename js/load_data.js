@@ -498,42 +498,6 @@ function loadHealthcare() {
         }
     });
 };
-// PCT FLOWS
-var pctLayer
-function loadPct() {
-    if (pctLayer) {pctLayer.remove()};
-    $.ajax({
-        url: "php/load_pct.php",
-        type: "POST",
-        data: {filter: $("#filter1").val(),
-               filter2: $("#pct_filter").val()
-            },
-        success: function(response) {
-            if ($("#pct_filter").val() !== 'Select PCT scenario') {
-                pctLayer = L.geoJSON(JSON.parse(response), {
-                    style: function(feature) {
-                        return {
-                            weight: stylePct(feature.properties.bicycle),
-                            color: "blue"
-                        };
-                    },
-                    onEachFeature: 
-                        function onEachFeature(feature, layer) {
-                        layer.bindPopup('<b>' + "Current predicted flows: " + '</b>' + feature.properties.bicycle + '<hr class=divider />' +
-                                        '<b>' + "GoDutch scenario: " + '</b>' + feature.properties.dutch_slc + '<hr class=divider />' + 
-                                        '<b>' + "Ebike scenario: " + '</b>' + feature.properties.ebike_slc + '<hr class=divider />' + 
-                                        '<b>' + "Statement: " + '</b>' + "null")
-                    }
-                }
-                );
-                pctLayer.addTo(map);
-
-            } else {
-                map.removeLayer(pctLayer);
-            };
-        }
-    });
-};
 
 
 
@@ -599,8 +563,4 @@ $("#checkbox_healthcare").change(function(){
 // COMMONPLACE
 $("#commonplace_filter").change(function(){
     loadCommonplace();
-});
-// PCT
-$("#pct_filter").change(function(){
-    loadPct();
 });
