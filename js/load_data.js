@@ -260,26 +260,6 @@ function loadWimd() {
     });
 };
 
-// LOAD CAR OWNERSHIP
-var carOwnershipLayer;
-function loadCarOwnership() {
-    $.ajax({
-        url: "php/load_car_ownership.php",
-        type: "POST",
-        data: {filter: $("#filter1").val()},
-        success: function(response) {
-            if ($("#checkbox_car_ownership").is(":checked")) {
-                carOwnershipLayer = L.geoJSON(JSON.parse(response));
-                console.log(response)
-                carOwnershipLayer.addTo(map);
-            } else {
-                map.removeLayer(carOwnershipLayer);
-            };
-        }
-    });
-    console.log($("#filter1").val())
-};
-
 // LOAD TRAVEL TO WORK MODE
 
 var travelToWork;

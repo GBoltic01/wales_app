@@ -7,6 +7,7 @@ var pctGovStyled
 var pctGenderStyled
 var pctDutchStyled
 var pctEbikeStyled
+var array = []
 
 function loadPct() {
     if (pctStyled) {
@@ -39,7 +40,7 @@ function loadPct() {
             })
             
             if ($("#pct_filter").val() == 'Baseline cycle data') {
-                var array = []
+                
 
                 L.geoJSON(JSON.parse(response), {
                     style: function(feature) {
@@ -69,7 +70,7 @@ function loadPct() {
                 
 
             } else if ($("#pct_filter").val() == 'GoDutch') {
-                var array = []
+                
 
                 L.geoJSON(JSON.parse(response), {
                     style: function(feature) {
@@ -98,7 +99,7 @@ function loadPct() {
                 }).addTo(map)
                 
             } else if ($("#pct_filter").val() == 'Government target') {
-                var array = []
+                
 
                 L.geoJSON(JSON.parse(response), {
                     style: function(feature) {
@@ -127,7 +128,7 @@ function loadPct() {
                 }).addTo(map)
                 
             } else if ($("#pct_filter").val() == 'Gender equality') {
-                var array = []
+                
 
                 L.geoJSON(JSON.parse(response), {
                     style: function(feature) {
@@ -156,7 +157,7 @@ function loadPct() {
                 }).addTo(map)
                 
             } else if ($("#pct_filter").val() == 'Ebike') {
-                var array = []
+               
 
                 L.geoJSON(JSON.parse(response), {
                     style: function(feature) {

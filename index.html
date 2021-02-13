@@ -132,12 +132,6 @@
         </div>
         <div>
             <label class="switch">
-                <input id="checkbox_car_ownership" type="checkbox" name="car_ownership" value="car_ownership"> 
-                <span class="slider round"></span>
-            </label> Car ownership by LSOA area<br>
-        </div>
-        <div>
-            <label class="switch">
                 <input id="checkbox_travel_to_work" type="checkbox" name="travel_to_work" value="travel_to_work"> 
                 <span class="slider round"></span>
             </label> Trvel to work mode<br>
@@ -203,62 +197,10 @@
         <h6 id="map_coords" class="text-center"></h6>
     </div>
 
-    <script src="js/styling_functions.js?new3"> // STYLE FUNCTIONS </script>
+    <script src="js/styling_functions.js?new4"> // STYLE FUNCTIONS </script>
     <script src="js/collapsible.js"> // COLLAPSIBLE </script>
     <script src="js/popup_info.js?new"> // INFO POPUP </script>
-    <script>
-
-
-        // BASEMAP
-        var map = L.map('mapdiv');
-        map.setView([52.416952, -3.613754], 8);
-
-        var baseMap = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-        });
-        map.addLayer(baseMap);
-
-        // LOAD LOCAL AUTHORITIES DATA 
-        var localAuthorityLayer;
-        refreshLocalAuthorities();
-
-        function refreshLocalAuthorities() {
-        $.ajax({
-            url: "php/load_local_authorities.php",
-            type: "POST",
-            data: {filter: $("#filter1").val()},
-            success: function(response) {
-                if (localAuthorityLayer) {
-                    map.removeLayer(localAuthorityLayer);
-                };
-                localAuthorityLayer = L.geoJSON(JSON.parse(response), {
-                    style: 
-                    function(feature) {
-                        return {
-                            color: "black",
-                            fillOpacity: 0,
-                            weight: 2.5
-                        };
-                    }
-                });
-                var localAuthorities = $.parseJSON(response);
-                $.each(localAuthorities.features, function(key, value) {
-                    $('#filter1').append('<option value="' + value.properties.name + '">' + value.properties.name + '</option>');   
-                    var map = {};
-                    $('#filter1.form-control option').each(function () {
-                        if (map[this.value]) {
-                            $(this).remove()
-                        }
-                        map[this.value] = true;
-                    });    
-                });
-                localAuthorityLayer.addTo(map);
-                map.fitBounds(localAuthorityLayer.getBounds());
-            }});       
-        };
-
-
-    </script>
+    <script src="js/basemap_localauthorities.js"> // BASEMAP AND LAs </script>
     <script src="js/load_data.js?new3"> // LOAD ALL DATASETS TO THE MAP </script>
     <script src="js/load_pct.js?new1"> // LOAD PCT DATA TO THE MAP</script>
     <script src="js/routing.js?new"> // ROUTING </script>

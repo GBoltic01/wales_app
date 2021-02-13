@@ -72,7 +72,8 @@ function styleEmploymentCentres(a) {
 function stylePct(a, b) {
 
     var test1 = ss.ckmeans(b, 5)
-    console.log(test1[0].slice(-1) + ',' + test1[1].slice(-1) + ',' + test1[2].slice(-1) +',' +  test1[3].slice(-1))
+    //console.log(test1)
+    //console.log(test1[0].slice(-1) + ',' + test1[1].slice(-1) + ',' + test1[2].slice(-1) +',' +  test1[3].slice(-1))
     return  a < 1 ? 0 :
             a < Math.max.apply(Math, test1[0]) ? 1 :
             a < Math.max.apply(Math, test1[1]) ? 2 :
