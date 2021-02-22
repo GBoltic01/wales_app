@@ -1,10 +1,11 @@
 var map = L.map('mapdiv');
 map.setView([52.4051, -4.1601], 8);
 
-var baseMap = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	maxZoom: 19,
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
-map.addLayer(baseMap);
+map.addLayer(OpenStreetMap_Mapnik);
 
 // LOAD LOCAL AUTHORITIES DATA 
 var localAuthorityLayer;

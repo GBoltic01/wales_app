@@ -36,3 +36,13 @@ $("#routing-tooltip").click(function(e) {
     content: '<i>Toggle the switch on and click on a map to specify origin and destination points. Toggle the switch off to reset the ruting machine.</i>'
   });
 });
+
+$("#get-in-touch").hover(function() {
+  new jBox('Tooltip', {
+    width: 400,
+    height: 100,
+    attach: '#get-in-touch',
+    closeOnMouseleave: true,
+    content: '<i>I would encourage you to get in touch if you have any questions, suggestions or comments. You can contact me via email: <b>gregor.boltic@gmail.com</b> or send me a message on <a href="https://www.linkedin.com/in/gregor-bolti%C4%8D-9ab9b8157/" target="_blank">LinkedIn</a></i>'
+  });
+});
