@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="CSS/leaflet-routing-machine.css"/>
     <link rel="stylesheet" href="awesome_markers/leaflet.awesome-markers.css">
     <link rel="stylesheet" href="CSS/MarkerCluster.css"/>
-    <link rel="stylesheet" href="CSS/get_in_touch_button.css"/>
+    <link rel="stylesheet" href="CSS/get_in_touch_button.css?new1"/>
     <link rel="stylesheet" href="CSS/MarkerCluster.Default.css"/>
     <link rel="stylesheet" href="CSS/toggle_button.css"/>
     <link rel="stylesheet" href="CSS/customised_html_elements.css"/>
@@ -39,8 +39,9 @@
                 linear-gradient(
                     #f3f3f3, rgb(214, 214, 214)
                 );
-            vertical-align: middle;
-            text-align: middle;
+                display:flex;
+                align-items: center;
+                justify-content: left;
         }
         #mapdiv {
             min-height: 90%;
@@ -57,7 +58,7 @@
         #legend_scrollable {
             position: relative;
             overflow-y: scroll;
-            height: 15%;
+            height: 180px;
             z-index:1000; 
             background-color: none;
             
@@ -65,7 +66,7 @@
         #legend_scrollable-1 {
             position: relative;
             overflow-y: scroll;
-            height: 15%;
+            height: 250px;
             z-index:1000; 
             background-color: none;
             
@@ -75,12 +76,13 @@
 
 </head>
 <body style="font-family: helvetica">
+
     <div id="header" class="col-md-12">
         <button id="get-in-touch" type="button" class="button4">Get in touch</button>
-        <h2><b>Active Travel Network Development Tool</b></h2>
+        <h2 style="font-size:1.5vw;"><b>Active Travel Network Development Tool</b></h2>
     </div>
     <div id="side_panel" class="col-md-3 side_panel">
-        <h4 class="text-left"><b>Find your data</b></h4>
+        <h4><b>Find your data</b></h4>
         <select id='filter1' class='form-control'>
             <option value='Select local authority'>Select local authority</option>
 

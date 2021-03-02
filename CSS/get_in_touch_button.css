@@ -4,7 +4,7 @@
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
-    right: 5px;
+    right: 10px;
     border-radius: 6px;
     transition-duration: 0.4s;
     border: none;
@@ -13,10 +13,12 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    font-size: 1vw;
+    margin: 2px 2px;
     transition-duration: 0.4s;
     cursor: pointer;
+    height: 32px;
+    max-height: 100%;
     z-index: 10000;
 } 
 
